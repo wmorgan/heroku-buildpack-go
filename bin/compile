@@ -38,16 +38,21 @@ virtualenv() {
     python "$buildpack/vendor/virtualenv-1.7/virtualenv.py" "$@"
 }
 
+echo "## build is $build"
+
 if test -f $build/Godeps
 then
+    echo "## found Godeps file"
     name=$(<$build/Godeps jq -r .ImportPath)
     ver=$(<$build/Godeps jq -r .GoVersion)
 elif test -d $build/Godeps
 then
+    echo "## found Godeps dir"
     name=$(<$build/Godeps/Godeps.json jq -r .ImportPath)
     ver=$(<$build/Godeps/Godeps.json jq -r .GoVersion)
 elif test -f $build/.godir
 then
+    echo "## found .godir"
     name=$(cat $build/.godir)
     ver=go${GOVERSION:-1.1.2}
 else
