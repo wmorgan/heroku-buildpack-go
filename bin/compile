@@ -160,6 +160,7 @@ cd $p
 if test -e $build/Godeps
 then
     echo "-----> gopath is $GOPATH"
+    echo "-----> pwd is $PWD"
     echo "-----> Running: godep go install ${FLAGS[@]} ./..."
     godep go install "${FLAGS[@]}" ./...
 else
