@@ -58,3 +58,44 @@ BUILDPACK_URL=YOUR_GITHUB_GIT_URL` instead of `--buildpack`.
 [quickstart]: http://mmcgrana.github.com/2012/09/getting-started-with-go-on-heroku.html
 [build-constraint]: http://golang.org/pkg/go/build/
 [app-engine-build-constraints]: http://blog.golang.org/2013/01/the-app-engine-sdk-and-workspaces-gopath.html
+
+## .godir and Godeps
+
+Early versions of this buildpack required users to
+create a `.godir` file in the root of the project,
+containing the application name in order to build the
+project. While using a `.godir` file is still supported,
+it has been deprecated in favor of using
+[godep](https://github.com/kr/godep) in your project to
+manage dependencies, and including the generated `Godep`
+directory in your git repository.
+
+## Using with cgo
+
+This buildpack supports building with C dependencies via
+[cgo](http://golang.org/cmd/cgo/). You can set config vars to specify
+CGO flags to, e.g., specify paths for vendored dependencies. E.g., to
+build [gopgsqldriver](https://github.com/jbarham/gopgsqldriver), add
+the config var `CGO_CFLAGS` with the value
+`-I/app/code/vendor/include/postgresql` and include the relevant
+Postgres header files in `vendor/include/postgresql/` in your app.
+
+## Setting the version at build time
+
+If you set the `GO_GIT_DESCRIBE_SYMBOL` to the name of a
+string variable, it will be set at build time to the
+output of `git describe --tags --always`. This lets you
+access the commit id or tag in your app. For example, in
+your `main.go`:
+
+```go
+package main
+
+var version string
+```
+
+To set this variable at build time, set the config var:
+
+```bash
+$ heroku set GO_GIT_DESCRIBE_SYMBOL=main.version
+```
