@@ -161,6 +161,8 @@ if test -e $build/Godeps
 then
     echo "-----> gopath is $GOPATH"
     echo "-----> pwd is $PWD"
+    echo "-----> files here are:"
+    find .
     echo "-----> Running: godep go install ${FLAGS[@]} ./..."
     godep go install "${FLAGS[@]}" ./...
 else
